@@ -33,7 +33,7 @@ export default function TabsLayout() {
           tabBarBackground: () => (
             Platform.OS === 'ios' ? (
               <BlurView
-                intensity={80}
+                intensity={30}
                 tint="light"
                 style={{
                   position: 'absolute',

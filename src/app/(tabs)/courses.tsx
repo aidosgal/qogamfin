@@ -1,9 +1,7 @@
-import { Text, View } from "react-native";
+import { CoursesScreen } from "@/src/pages/courses";
 
 export default function Courses() {
     return (
-        <View>
-            <Text>Hello</Text>
-        </View>
+        <CoursesScreen />
     )
 }
