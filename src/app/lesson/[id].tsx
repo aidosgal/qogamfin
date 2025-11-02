@@ -1,9 +1,11 @@
+import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function LessonScreen() {
-  return (
-    <View>
-      <Text>Lesson</Text>
-    </View>
-  )
+    const { id } = useLocalSearchParams<{ id: string }>();
+    return (
+        <View>
+            <Text>Lesson {id}</Text>
+        </View>
+    )
 }
