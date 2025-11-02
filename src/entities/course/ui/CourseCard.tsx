@@ -50,7 +50,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onPress }) => {
         if (onPress) {
             onPress();
         }
-        router.push(`/(auth)/login`)
+        router.push(`/course/${course.id}`)
     };
 
     return (
