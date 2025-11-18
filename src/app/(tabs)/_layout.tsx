@@ -2,8 +2,11 @@ import { Tabs } from "expo-router";
 import Feather from '@expo/vector-icons/Feather';
 import { View, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { useTranslation } from 'react-i18next';
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
+  
   return (
     <View style={{ flex: 1 }}>
       <Tabs
@@ -57,7 +60,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Главная',
+            title: t('tabs.home'),
             tabBarIcon: ({ color }: { color: string }) => (
               <Feather name="home" size={24} color={color} />
             ),
@@ -66,7 +69,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="courses"
           options={{
-            title: 'Уроки',
+            title: t('tabs.courses'),
             tabBarIcon: ({ color }: { color: string }) => (
               <Feather name="cast" size={24} color={color} />
             )
@@ -75,7 +78,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="consults"
           options={{
-            title: 'Консалтинг',
+            title: t('tabs.consults'),
             tabBarIcon: ({ color }: { color: string }) => (
               <Feather name="info" size={24} color={color} />
             )
@@ -84,7 +87,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="profile"
           options={{
-            title: 'Профиль',
+            title: t('tabs.profile'),
             tabBarIcon: ({ color }: { color: string }) => (
               <Feather name="user" size={24} color={color} />
             )

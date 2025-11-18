@@ -6,36 +6,42 @@ import { User } from "../model/types/user";
 import { FAQModal } from "../../faq/ui/FaqModal";
 import { DocumentsModal } from "../../documents/ui/DocumentsModal";
 import { LanguageModal } from "../../locale/ui/LanguageModal";
+import { EditProfileModal } from "./EditProfileModal";
+import { useTranslation } from "react-i18next";
 
 type UserCardProps = {
     profile: User;
+    onProfileUpdate?: () => void;
 }
 
-export const UserCard: React.FC<UserCardProps> = ({ profile }) => {
+export const UserCard: React.FC<UserCardProps> = ({ profile, onProfileUpdate }) => {
     const router = useRouter();
+    const { t, i18n } = useTranslation();
     const [showFAQ, setShowFAQ] = useState(false);
-  const [showDocuments, setShowDocuments] = useState(false);
+    const [showDocuments, setShowDocuments] = useState(false);
     const [langVisible, setLangVisible] = useState(false);
+    const [showEditProfile, setShowEditProfile] = useState(false);
 
-    const handleEditProfile = () => {
-        router.push('/(auth)/login');
-    };
+    // Split name into first and last name if needed
+    const nameParts = profile.name.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
 
     const handleLogout = async () => {
         Alert.alert(
-            'Выйти',
-            'Вы уверены, что хотите выйти из аккаунта?',
+            t('profile.logout_confirm_title'),
+            t('profile.logout_confirm_message'),
             [
-                { text: 'Отмена', style: 'cancel' },
+                { text: t('profile.cancel'), style: 'cancel' },
                 {
-                    text: 'Выйти',
+                    text: t('profile.logout'),
                     style: 'destructive',
                     onPress: async () => {
                         try {
                             router.push('/(auth)/login');
                         } catch (error) {
                             console.error('Logout error:', error);
-                            Alert.alert('Ошибка', 'Не удалось выйти из аккаунта');
+                            Alert.alert(t('profile.error'), t('profile.logout_error'));
                         }
                     },
                 },
@@ -45,28 +51,28 @@ export const UserCard: React.FC<UserCardProps> = ({ profile }) => {
 
     const handleDeleteAccount = async () => {
         Alert.alert(
-            'Удалить аккаунт',
-            'Это действие необратимо. Все ваши данные будут удалены без возможности восстановления.',
+            t('profile.delete_confirm_title'),
+            t('profile.delete_confirm_message'),
             [
-                { text: 'Отмена', style: 'cancel' },
+                { text: t('profile.cancel'), style: 'cancel' },
                 {
-                    text: 'Удалить',
+                    text: t('profile.delete'),
                     style: 'destructive',
                     onPress: () => {
                         Alert.prompt(
-                            'Подтверждение',
-                            'Введите ваш пароль для подтверждения удаления аккаунта',
+                            t('profile.delete_confirm_title'),
+                            t('profile.delete_password_prompt'),
                             async (password) => {
                                 if (password) {
                                     try {
-                                        Alert.alert('Успешно', 'Аккаунт удален', [
-                                            { text: 'OK', onPress: () => router.replace('/(auth)/login') },
+                                        Alert.alert(t('profile.success'), t('profile.delete_success'), [
+                                            { text: t('profile.ok'), onPress: () => router.replace('/(auth)/login') },
                                         ]);
                                     } catch (error: any) {
                                         console.error('Delete account error:', error);
                                         Alert.alert(
-                                            'Ошибка',
-                                            error.response?.data?.message || 'Не удалось удалить аккаунт'
+                                            t('profile.error'),
+                                            error.response?.data?.message || t('profile.delete_error')
                                         );
                                     }
                                 }
@@ -85,39 +91,39 @@ export const UserCard: React.FC<UserCardProps> = ({ profile }) => {
                 <Feather name="log-out" size={24} color="black" />
             </TouchableOpacity>
             <View style={styles.nameContainer}>
-                <Text style={styles.name}>{profile.first_name}{'\n'}{profile.last_name}</Text>
+                <Text style={styles.name}>{firstName}{lastName ? '\n' + lastName : ''}</Text>
             </View>
-            <TouchableOpacity style={styles.row} onPress={handleEditProfile}>
+            <TouchableOpacity style={styles.row} onPress={() => setShowEditProfile(true)}>
                 <Feather name="user" size={24} color="black" />
-                <Text style={styles.rowTitle}>Изменить личные данные</Text>
+                <Text style={styles.rowTitle}>{t('profile.edit_profile')}</Text>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.row} onPress={() => setLangVisible(true)}>
                 <Feather name="globe" size={24} color="black" />
                 <View>
-                    <Text style={styles.rowTitle}>Язык приложения</Text>
-                    <Text style={styles.rowSubtitle}>Текущий язык: русский</Text>
+                    <Text style={styles.rowTitle}>{t('profile.language')}</Text>
+                    <Text style={styles.rowSubtitle}>{t('profile.current_language')}: {i18n.language === 'ru' ? t('profile.language_russian') : t('profile.language_kazakh')}</Text>
                 </View>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.row} onPress={handleEditProfile}>
+            <TouchableOpacity style={styles.row} onPress={() => router.push('/certificates')}>
                 <Feather name="award" size={24} color="black" />
-                <Text style={styles.rowTitle}>Сертификаты</Text>
+                <Text style={styles.rowTitle}>{t('profile.certificates')}</Text>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.row} onPress={handleEditProfile}>
+            <TouchableOpacity style={styles.row} onPress={() => {router.push('/(tabs)/courses')}}>
                 <Feather name="navigation" size={24} color="black" />
-                <Text style={styles.rowTitle}>Мой путь в обучении</Text>
+                <Text style={styles.rowTitle}>{t('profile.my_path')}</Text>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.row} onPress={() => setShowDocuments(true)}>
                 <Feather name="book-open" size={24} color="black" />
-                <Text style={styles.rowTitle}>Документы</Text>
+                <Text style={styles.rowTitle}>{t('profile.documents')}</Text>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.row} onPress={() => setShowFAQ(true)}>
                 <Feather name="message-circle" size={24} color="black" />
-                <Text style={styles.rowTitle}>FAQ</Text>
+                <Text style={styles.rowTitle}>{t('profile.faq')}</Text>
                 <Feather name="chevron-right" size={24} color="black" style={styles.chevron} />
             </TouchableOpacity>
 
@@ -126,10 +132,15 @@ export const UserCard: React.FC<UserCardProps> = ({ profile }) => {
                     style={styles.deleteButton}
                     onPress={handleDeleteAccount}
                 >
-                    <Text style={styles.deleteButtonText}>Удалить аккаунт</Text>
+                    <Text style={styles.deleteButtonText}>{t('profile.delete_account')}</Text>
                 </TouchableOpacity>
             </View>
 
+            <EditProfileModal 
+                visible={showEditProfile} 
+                onClose={() => setShowEditProfile(false)}
+                onUpdate={onProfileUpdate}
+            />
             <FAQModal visible={showFAQ} onClose={() => setShowFAQ(false)} />
             <DocumentsModal visible={showDocuments} onClose={() => setShowDocuments(false)} />
             <LanguageModal visible={langVisible} onClose={() => setLangVisible(false)} />

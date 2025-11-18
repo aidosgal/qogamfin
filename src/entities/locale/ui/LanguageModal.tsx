@@ -35,9 +35,8 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({ visible, onClose }
     const [selectedLang, setSelectedLang] = useState<string>(i18n.language);
 
     const languages: LanguageOption[] = [
-        { code: "en", label: "English", native: "English", flag: "🇬🇧" },
         { code: "ru", label: "Русский", native: "Russian", flag: "🇷🇺" },
-        { code: "kz", label: "Қазақ", native: "Kazakh", flag: "🇰🇿" },
+        { code: "kz", label: "Қазақша", native: "Kazakh", flag: "🇰🇿" },
     ];
 
     // handle animation

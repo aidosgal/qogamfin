@@ -5,11 +5,20 @@ import { useRouter } from "expo-router";
 
 type VideoThumbnailProps = {
     lesson: CourseLessons;
+    courseId?: number;
 }
 
-export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ lesson }) => {
+export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ lesson, courseId }) => {
     const thumbnail = `https://img.youtube.com/vi/${lesson.video}/maxresdefault.jpg`;
     const router = useRouter();
+    
+    const handlePlayPress = () => {
+        if (courseId) {
+            router.push(`/lesson/${lesson.id}?courseId=${courseId}`);
+        } else {
+            router.push(`/lesson/${lesson.id}`);
+        }
+    };
     
     return (
         <ImageBackground
@@ -28,7 +37,7 @@ export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ lesson }) => {
 
             <TouchableOpacity
                 style={styles.playButton}
-                onPress={() => router.push(`/lesson/${lesson.id}`)}
+                onPress={handlePlayPress}
             >
                 <Feather name="play" color="white" size={32} style={{ marginLeft: 3 }} />
             </TouchableOpacity>

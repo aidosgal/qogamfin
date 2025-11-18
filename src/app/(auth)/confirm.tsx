@@ -182,15 +182,15 @@ export default function ConfirmScreen() {
                   borderRadius: 9999,
                   paddingVertical: 16,
                   alignItems: 'center',
-                  backgroundColor: (state.otpInputs.filter((input: string) => input !== '').length !== 4 || state.loading) ? '#F9FFC5' : '#EFFE6D'
+                  backgroundColor: (state.otpInputs.filter((input: string) => input !== '').length !== 4 || state.loading) ? '#93C5FD' : '#015FF9'
                 }}
                 onPress={handleVerifyPress}
                 disabled={state.otpInputs.filter((input: string) => input !== '').length !== 4 || state.loading}
               >
                 {state.loading ? (
-                  <ActivityIndicator color="#000" size="small" />
+                  <ActivityIndicator color="#FFF" size="small" />
                 ) : (
-                  <Text style={{ color: '#000', fontSize: 18, fontWeight: '600' }}>
+                  <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '600' }}>
                     Подтвердить код
                   </Text>
                 )}

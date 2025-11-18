@@ -19,10 +19,14 @@ export const useAuth = () => {
     otpInputs: ['', '', '', '', '', ''],
     countdown: 0,
   });
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
-    loadStoredAuth();
-  }, []);
+    if (!hasLoaded) {
+      loadStoredAuth();
+      setHasLoaded(true);
+    }
+  }, [hasLoaded]);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -39,8 +43,6 @@ export const useAuth = () => {
       const token = await AsyncStorage.getItem(STORAGE_KEY);
       const userStr = await AsyncStorage.getItem(USER_KEY);
       const phone = await AsyncStorage.getItem(PHONE_KEY);
-      
-      console.log('📱 [useAuth] Loading stored auth - phone:', phone);
       
       if (token && userStr) {
         const user = JSON.parse(userStr);

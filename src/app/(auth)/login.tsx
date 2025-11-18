@@ -93,15 +93,15 @@ export default function LoginScreen() {
                   borderRadius: 9999,
                   paddingVertical: 16,
                   alignItems: 'center',
-                  backgroundColor: !state.loginRequest.phone || state.loading ? '#F9FFC5' : '#EFFE6D'
+                  backgroundColor: !state.loginRequest.phone || state.loading ? '#93C5FD' : '#015FF9'
                 }}
                 onPress={sendOtp}
                 disabled={!state.loginRequest.phone || state.loading}
               >
                 {state.loading ? (
-                  <ActivityIndicator color="#000" size="small" />
+                  <ActivityIndicator color="#FFF" size="small" />
                 ) : (
-                  <Text style={{ color: '#000', fontSize: 18, fontWeight: '600' }}>
+                  <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '600' }}>
                     Получить SMS код
                   </Text>
                 )}

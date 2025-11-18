@@ -6,16 +6,25 @@ import { useRouter } from "expo-router";
 
 type LessonCardProps = {
     lesson: CourseLessons;
+    courseId?: number;
 };
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
-export const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
+export const LessonCard: React.FC<LessonCardProps> = ({ lesson, courseId }) => {
   const router = useRouter();
     const thumbnail = `https://img.youtube.com/vi/${lesson.video}/maxresdefault.jpg`;
 
+    const handlePress = () => {
+        if (courseId) {
+            router.push(`/lesson/${lesson.id}?courseId=${courseId}`);
+        } else {
+            router.push(`/lesson/${lesson.id}`);
+        }
+    };
+
     return (
-        <TouchableOpacity style={styles.card} onPress={() => router.push(`/lesson/${lesson.id}`)}>
+        <TouchableOpacity style={styles.card} onPress={handlePress}>
             <Image source={{ uri: thumbnail }} style={styles.thumbnail} />
             <View style={styles.content}>
                 <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>

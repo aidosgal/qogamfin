@@ -1,6 +1,7 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const FeatureCard = ({ number, title, description }: { number: string; title: string; description: string }) => (
   <View style={styles.featureCard}>
@@ -35,6 +36,8 @@ const ConsultationCard = ({
 );
 
 export default function ConsultScreen() {
+  const { t } = useTranslation();
+  
   const handleLegalConsultation = () => {
     // Open WhatsApp with legal consultation
     Linking.openURL('https://wa.me/77000230144');
@@ -48,28 +51,28 @@ export default function ConsultScreen() {
   const features = [
     {
       number: '1',
-      title: 'Индивидуальный подход',
-      description: 'Мы разрабатываем персональный план выхода из кризиса, учитывая вашу ситуацию',
+      title: t('consults.features.individual.title'),
+      description: t('consults.features.individual.description'),
     },
     {
       number: '2',
-      title: 'Бесплатная консультация',
-      description: 'Все консультации бесплатны. Оцените нашу компетентность перед сотрудничеством.',
+      title: t('consults.features.free.title'),
+      description: t('consults.features.free.description'),
     },
     {
       number: '3',
-      title: 'Профессиональная помощь',
-      description: 'Наши эксперты помогут разобраться с долгами и найти оптимальные решения.',
+      title: t('consults.features.professional.title'),
+      description: t('consults.features.professional.description'),
     },
     {
       number: '4',
-      title: 'Поддержка 24/7',
-      description: 'Помогаем даже в нерабочее время. Нажмите SOS и свяжитесь с нами.',
+      title: t('consults.features.support.title'),
+      description: t('consults.features.support.description'),
     },
     {
       number: '5',
-      title: 'Конфиденциальность',
-      description: 'Ваши обращения строго конфиденциальны. Мы создаём безопасное пространство для общения.',
+      title: t('consults.features.confidential.title'),
+      description: t('consults.features.confidential.description'),
     },
   ];
 
@@ -78,25 +81,25 @@ export default function ConsultScreen() {
       
         
         
-        <Text style={styles.mainTitle}>Чат для консультации</Text>
+        <Text style={styles.mainTitle}>{t('consults.title')}</Text>
 
         
         <ConsultationCard
           iconName="info"
-          title="Юридическая Консультация"
-          subtitle="Нажмите чтобы написать на Whatsapp"
+          title={t('consults.legal')}
+          subtitle={t('consults.whatsapp_prompt')}
           onPress={handleLegalConsultation}
         />
         
         <ConsultationCard
           iconName="attach-money"
-          title="Финансовая Консультация"
-          subtitle="Нажмите чтобы написать на Whatsapp"
+          title={t('consults.financial')}
+          subtitle={t('consults.whatsapp_prompt')}
           onPress={handleFinancialConsultation}
         />
 
         
-        <Text style={styles.sectionTitle}>Обращайтесь прямо сейчас</Text>
+        <Text style={styles.sectionTitle}>{t('consults.contact_now')}</Text>
 
         
         <View style={styles.featuresContainer}>

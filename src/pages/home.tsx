@@ -18,12 +18,15 @@ import { useRouter } from "expo-router";
 import { CourseMiniCard } from "../entities/course/ui/CourseMiniCard";
 import { CalcCard } from "../entities/calc/ui/CalcCard";
 import { CalcGrid } from "../entities/calc/ui/CalcGrid";
+import { useTranslation } from "react-i18next";
+import i18n from "../shared/i18n/i18n";
 
 export const HomeScreen: React.FC = () => {
   const [course, setCourse] = useState<CourseDetailed>();
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [images] = useState<string[]>([
     "https://qogamfin.kz/images/freedom.webp",
@@ -47,8 +50,48 @@ export const HomeScreen: React.FC = () => {
     try {
       setLoading(true);
       const data = await coursesService.getCourses();
-      setCourses(data);
+      
+      // Apply translations to courses list
+      const currentLocale = i18n.language;
+      const translatedCourses = data.map(course => {
+        const translation = course.translations?.find(t => t.locale === currentLocale);
+        if (translation) {
+          return {
+            ...course,
+            title: translation.title,
+            description: translation.description,
+            img: translation.img,
+          };
+        }
+        return course;
+      });
+      
+      setCourses(translatedCourses);
+      
       const detailed = await coursesService.getCourse(data?.[1].id);
+      
+      // Apply translations to detailed course
+      const courseTranslation = detailed.translations?.find(t => t.locale === currentLocale);
+      if (courseTranslation) {
+        detailed.title = courseTranslation.title;
+        detailed.description = courseTranslation.description;
+        detailed.img = courseTranslation.img;
+      }
+      
+      // Apply translations to lessons
+      detailed.lessons = detailed.lessons.map(lesson => {
+        const lessonTranslation = lesson.translations?.find(t => t.locale === currentLocale);
+        if (lessonTranslation) {
+          return {
+            ...lesson,
+            title: lessonTranslation.title,
+            description: lessonTranslation.description,
+            video: lessonTranslation.video,
+          };
+        }
+        return lesson;
+      });
+      
       setCourse(detailed);
     } catch (error) {
       console.error("Failed to load course:", error);
@@ -92,7 +135,7 @@ export const HomeScreen: React.FC = () => {
           onPress={() => router.push("/(tabs)/courses")}
           style={styles.sectionHeader}
         >
-          <Text style={styles.sectionTitle}>Все Курсы</Text>
+          <Text style={styles.sectionTitle}>{t('home.all_courses')}</Text>
           <Feather name="chevron-right" size={25} color="black" />
         </TouchableOpacity>
 
@@ -110,7 +153,7 @@ export const HomeScreen: React.FC = () => {
 
         {/* Partners */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Наши партнеры</Text>
+          <Text style={styles.sectionTitle}>{t('home.our_partners')}</Text>
         </View>
 
         <ScrollView

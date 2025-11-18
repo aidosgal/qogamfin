@@ -6,7 +6,7 @@ import { coursesService } from "../entities/course/model/api/list";
 import { CourseCard } from "../entities/course/ui/CourseCard";
 
 export const CoursesScreen: React.FC = () => {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const [courses, setCourses] = useState<Course[]>([]);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ export const CoursesScreen: React.FC = () => {
         <View style={styles.container}>
             <TextInput
                 style={styles.search}
-                placeholder="Поиск"
+                placeholder={t('courses.search_placeholder')}
                 placeholderTextColor={"#999"}
                 value={searchQuery}
                 onChangeText={handleSearch}
@@ -96,7 +96,7 @@ export const CoursesScreen: React.FC = () => {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>Курсы не найдены</Text>
+                        <Text style={styles.emptyText}>{t('courses.no_courses')}</Text>
                     </View>
                 }
             />
