@@ -10,7 +10,8 @@
   },
   "home": {
     "all_courses": "Все Курсы",
-    "our_partners": "Наши партнеры"
+    "our_partners": "Наши партнеры",
+    "popular_courses": "Популярные курсы"
   },
   "profile": {
     "loading": "Загрузка...",
@@ -73,7 +74,11 @@
   "courses": {
     "search_placeholder": "Поиск",
     "no_courses": "Курсы не найдены",
-    "content": "Содержание"
+    "content": "Содержание",
+    "lessons_count": "уроков",
+    "more_details": "Подробнее",
+    "continue_watching": "Продолжить просмотр",
+    "not_watched": "Не просмотрено"
   },
   "lesson": {
     "materials": "Материалы",

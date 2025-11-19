@@ -16,8 +16,7 @@ import { CourseThumbnail } from "../entities/course/ui/CourseThumbnail";
 import Feather from "@expo/vector-icons/Feather";
 import { useRouter } from "expo-router";
 import { CourseMiniCard } from "../entities/course/ui/CourseMiniCard";
-import { CalcCard } from "../entities/calc/ui/CalcCard";
-import { CalcGrid } from "../entities/calc/ui/CalcGrid";
+import { CourseCard } from "../entities/course/ui/CourseCard";
 import { useTranslation } from "react-i18next";
 import i18n from "../shared/i18n/i18n";
 
@@ -46,6 +45,14 @@ export const HomeScreen: React.FC = () => {
     loadCourse();
   }, []);
 
+  // Reload when language changes
+  useEffect(() => {
+    if (courses !== null) {
+      console.log('🔄 Language changed, reloading courses...');
+      loadCourse();
+    }
+  }, [i18n.language]);
+
   const loadCourse = async () => {
     try {
       setLoading(true);
@@ -53,8 +60,12 @@ export const HomeScreen: React.FC = () => {
       
       // Apply translations to courses list
       const currentLocale = i18n.language;
+      console.log('🌍 Current locale:', currentLocale);
+      console.log('📚 Sample course translations:', data[0]?.translations);
+      
       const translatedCourses = data.map(course => {
         const translation = course.translations?.find(t => t.locale === currentLocale);
+        console.log(`🔍 Course "${course.title}" - Found translation:`, translation ? 'YES' : 'NO', '(locale:', currentLocale, ')');
         if (translation) {
           return {
             ...course,
@@ -170,7 +181,17 @@ export const HomeScreen: React.FC = () => {
           ))}
         </ScrollView>
 
-        <CalcGrid />
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{t('home.popular_courses')}</Text>
+        </View>
+
+        <View style={styles.coursesGrid}>
+          {courses?.slice(0, 4).map((course, index) => (
+            <View key={index} style={styles.courseCardWrapper}>
+              <CourseCard course={course} />
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </ImageBackground>
   );
@@ -212,12 +233,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     resizeMode: "contain",
   },
-  calcGrid: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        paddingHorizontal: 20,
-        marginTop: 10, // 🔥 reduced spacing
-        gap: 15, // nice modern gap between cards
-    },
+  coursesGrid: {
+    paddingHorizontal: 20,
+    marginTop: 10,
+    gap: 15,
+  },
+  courseCardWrapper: {
+    marginBottom: 10,
+  },
 });

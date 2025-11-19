@@ -4,13 +4,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import en from './locales/en.json';
 import ru from './locales/ru.json';
-import kz from './locales/kz.json';
+import kk from './locales/kk.json';
 
 const LANG_KEY = 'user-language';
 
 export async function initLanguage() {
-  const savedLang = await AsyncStorage.getItem(LANG_KEY);
+  let savedLang = await AsyncStorage.getItem(LANG_KEY);
+  
+  // Migrate old 'kz' locale to 'kk'
+  if (savedLang === 'kz') {
+    savedLang = 'kk';
+    await AsyncStorage.setItem(LANG_KEY, 'kk');
+    console.log('🔄 Migrated locale from kz to kk');
+  }
+  
   const lng = savedLang || 'ru';
+  console.log('🌍 Initializing i18n with locale:', lng);
 
   await i18n
     .use(initReactI18next)
@@ -20,7 +29,7 @@ export async function initLanguage() {
       resources: {
         en: { translation: en },
         ru: { translation: ru },
-        kz: { translation: kz },
+        kk: { translation: kk },
       },
       interpolation: { escapeValue: false },
     });

@@ -36,7 +36,7 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({ visible, onClose }
 
     const languages: LanguageOption[] = [
         { code: "ru", label: "Русский", native: "Russian", flag: "🇷🇺" },
-        { code: "kz", label: "Қазақша", native: "Kazakh", flag: "🇰🇿" },
+        { code: "kk", label: "Қазақша", native: "Kazakh", flag: "🇰🇿" },
     ];
 
     // handle animation
@@ -86,9 +86,11 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({ visible, onClose }
 
     // change and save language
     const handleLanguageSelect = async (lang: string) => {
+        console.log('🌐 Changing language to:', lang);
         await i18n.changeLanguage(lang);
         await AsyncStorage.setItem(LANG_KEY, lang);
         setSelectedLang(lang);
+        console.log('✅ Language changed successfully to:', lang);
         onClose();
     };
 

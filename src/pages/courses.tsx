@@ -16,6 +16,14 @@ export const CoursesScreen: React.FC = () => {
         loadCourses();
     }, []);
 
+    // Reload when language changes
+    useEffect(() => {
+        if (courses.length > 0) {
+            console.log('🔄 Language changed, reloading courses...');
+            loadCourses();
+        }
+    }, [i18n.language]);
+
     useEffect(() => {
         handleSearch(searchQuery);
     }, [searchQuery, courses, i18n.language]);
@@ -34,9 +42,13 @@ export const CoursesScreen: React.FC = () => {
     };
 
     const getLocalizedContent = (course: Course) => {
+        console.log('🌍 Getting localized content for locale:', i18n.language);
         const translation = course.translations.find(
             (t) => t.locale === i18n.language
         );
+        if (!translation) {
+            console.log('⚠️ No translation found. Available locales:', course.translations.map(t => t.locale));
+        }
         return {
             title: translation?.title || course.title,
             description: translation?.description || course.description,

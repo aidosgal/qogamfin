@@ -2,8 +2,9 @@ import { ImageBackground, StyleSheet, TouchableOpacity, View, Animated } from "r
 import { Course } from "../model/types/course";
 import { Text } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type CourseCardProps = {
     course: Course;
@@ -13,8 +14,20 @@ type CourseCardProps = {
 export const CourseCard: React.FC<CourseCardProps> = ({ course, onPress }) => {
     const overlayOpacity = useRef(new Animated.Value(1)).current;
     const contentOpacity = useRef(new Animated.Value(1)).current;
-    const image = { uri: `https://qogamfin.kz/${course.img}` };
     const router = useRouter();
+    const { i18n, t } = useTranslation();
+
+    // Apply translations based on current locale
+    const localizedContent = useMemo(() => {
+        const translation = course.translations?.find(t => t.locale === i18n.language);
+        return {
+            title: translation?.title || course.title,
+            description: translation?.description || course.description,
+            img: translation?.img || course.img,
+        };
+    }, [course, i18n.language]);
+
+    const image = { uri: `https://qogamfin.kz/${localizedContent.img}` };
 
     const handlePressIn = () => {
         Animated.parallel([
@@ -82,12 +95,12 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onPress }) => {
                 >
                     <View style={styles.lessonsContainer}>
                         <Feather name="youtube" size={18} color="white" />
-                        <Text style={styles.lessonsText}>{course.lessons_count} уроков</Text>
+                        <Text style={styles.lessonsText}>{course.lessons_count} {t('courses.lessons_count')}</Text>
                     </View>
                     <View style={{ marginTop: "auto" }}>
-                        <Text style={styles.title}>{course.title}</Text>
+                        <Text style={styles.title}>{localizedContent.title}</Text>
                         <View style={styles.button}>
-                            <Text style={styles.buttonText}>Подробнее</Text>
+                            <Text style={styles.buttonText}>{t('courses.more_details')}</Text>
                             <Feather name="arrow-down-right" color="white" size={16} style={{ marginLeft: "auto" }} />
                         </View>
                     </View>

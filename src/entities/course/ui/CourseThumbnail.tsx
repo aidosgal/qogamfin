@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CourseLessons } from "../model/types/course";
 import { Image, ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type CourseThumbnailProps = {
   lesson: CourseLessons;
 };
 
 export const CourseThumbnail: React.FC<CourseThumbnailProps> = ({ lesson }) => {
-  const thumbnail = `https://img.youtube.com/vi/${lesson.video}/maxresdefault.jpg`;
   const router = useRouter();
+  const { i18n, t } = useTranslation();
+
+  // Apply translations based on current locale
+  const localizedLesson = useMemo(() => {
+    const translation = lesson.translations?.find(t => t.locale === i18n.language);
+    return {
+      title: translation?.title || lesson.title,
+      description: translation?.description || lesson.description,
+      video: translation?.video || lesson.video,
+    };
+  }, [lesson, i18n.language]);
+
+  const thumbnail = `https://img.youtube.com/vi/${localizedLesson.video}/maxresdefault.jpg`;
 
   return (
         <ImageBackground
@@ -25,12 +38,12 @@ export const CourseThumbnail: React.FC<CourseThumbnailProps> = ({ lesson }) => {
                 style={{ height: 50, width: 90, alignSelf: "flex-start", marginLeft: 20 }}
                 resizeMode="contain"
             />
-            <Text style={styles.title}>{lesson.title}</Text>
+            <Text style={styles.title}>{localizedLesson.title}</Text>
             <TouchableOpacity
                 style={styles.playButton}
                 onPress={() => router.push(`/lesson/${lesson.id}`)}
             >
-                <Text style={styles.playButtonText}>Продолжить просмотр</Text>
+                <Text style={styles.playButtonText}>{t('courses.continue_watching')}</Text>
             </TouchableOpacity>
         </ImageBackground>
     );

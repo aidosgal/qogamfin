@@ -28,6 +28,14 @@ export default function LessonScreen() {
         loadLesson();
     }, [id]);
 
+    // Reload when language changes
+    useEffect(() => {
+        if (lesson !== null) {
+            console.log('🔄 Language changed, reloading lesson...');
+            loadLesson();
+        }
+    }, [i18n.language]);
+
     const loadLesson = async () => {
         try {
             setLoading(true);

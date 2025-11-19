@@ -2,6 +2,8 @@ import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react
 import { CourseLessons } from "../../course/model/types/course";
 import Feather from "@expo/vector-icons/Feather";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 type VideoThumbnailProps = {
     lesson: CourseLessons;
@@ -9,8 +11,20 @@ type VideoThumbnailProps = {
 }
 
 export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ lesson, courseId }) => {
-    const thumbnail = `https://img.youtube.com/vi/${lesson.video}/maxresdefault.jpg`;
     const router = useRouter();
+    const { i18n } = useTranslation();
+
+    // Apply translations based on current locale
+    const localizedLesson = useMemo(() => {
+        const translation = lesson.translations?.find(t => t.locale === i18n.language);
+        return {
+            title: translation?.title || lesson.title,
+            description: translation?.description || lesson.description,
+            video: translation?.video || lesson.video,
+        };
+    }, [lesson, i18n.language]);
+
+    const thumbnail = `https://img.youtube.com/vi/${localizedLesson.video}/maxresdefault.jpg`;
     
     const handlePlayPress = () => {
         if (courseId) {
@@ -42,7 +56,7 @@ export const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ lesson, courseId
                 <Feather name="play" color="white" size={32} style={{ marginLeft: 3 }} />
             </TouchableOpacity>
 
-            <Text style={styles.title}>{lesson.title}</Text>
+            <Text style={styles.title}>{localizedLesson.title}</Text>
         </ImageBackground>
     );
 }

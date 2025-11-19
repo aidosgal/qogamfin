@@ -1,7 +1,8 @@
 import { ImageBackground, StyleSheet, TouchableOpacity, View, Animated, Text } from "react-native";
 import { Course } from "../model/types/course";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type CourseCardProps = {
   course: Course;
@@ -11,8 +12,20 @@ type CourseCardProps = {
 export const CourseMiniCard: React.FC<CourseCardProps> = ({ course, onPress }) => {
   const overlayOpacity = useRef(new Animated.Value(1)).current;
   const contentOpacity = useRef(new Animated.Value(1)).current;
-  const image = { uri: `https://qogamfin.kz/${course.img}` };
   const router = useRouter();
+  const { i18n } = useTranslation();
+
+  // Apply translations based on current locale
+  const localizedContent = useMemo(() => {
+    const translation = course.translations?.find(t => t.locale === i18n.language);
+    return {
+      title: translation?.title || course.title,
+      description: translation?.description || course.description,
+      img: translation?.img || course.img,
+    };
+  }, [course, i18n.language]);
+
+  const image = { uri: `https://qogamfin.kz/${localizedContent.img}` };
 
   const handlePressIn = () => {
     Animated.parallel([
@@ -66,10 +79,10 @@ export const CourseMiniCard: React.FC<CourseCardProps> = ({ course, onPress }) =
           <Animated.View style={[styles.overlay, { opacity: overlayOpacity }]} />
           <Animated.View style={[styles.content, { opacity: contentOpacity }]} pointerEvents="none">
             <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-              {course.title}
+              {localizedContent.title}
             </Text>
             <Text style={styles.description} numberOfLines={2} ellipsizeMode="tail">
-              {course.description}
+              {localizedContent.description}
             </Text>
           </Animated.View>
         </ImageBackground>

@@ -21,6 +21,14 @@ export default function Course() {
         loadCourse();
     }, [id]);
 
+    // Reload when language changes
+    useEffect(() => {
+        if (course !== null) {
+            console.log('🔄 Language changed, reloading course...');
+            loadCourse();
+        }
+    }, [i18n.language]);
+
     const markCourseAsAttended = async (courseId: number) => {
         try {
             const token = await AsyncStorage.getItem(STORAGE_KEY);
@@ -48,7 +56,10 @@ export default function Course() {
             
             // Apply translations based on current locale
             const currentLocale = i18n.language;
+            console.log('🌍 Course detail - Current locale:', currentLocale);
+            console.log('📚 Available translations:', data.translations?.map(t => t.locale));
             const courseTranslation = data.translations?.find(t => t.locale === currentLocale);
+            console.log('🔍 Found course translation:', courseTranslation ? 'YES' : 'NO');
             
             if (courseTranslation) {
                 data.title = courseTranslation.title;

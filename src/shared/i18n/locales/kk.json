@@ -10,7 +10,8 @@
   },
   "home": {
     "all_courses": "Барлық курстар",
-    "our_partners": "Біздің серіктестер"
+    "our_partners": "Біздің серіктестер",
+    "popular_courses": "Танымал курстар"
   },
   "profile": {
     "loading": "Жүктелуде...",
@@ -73,7 +74,11 @@
   "courses": {
     "search_placeholder": "Іздеу",
     "no_courses": "Курстар табылмады",
-    "content": "Мазмұны"
+    "content": "Мазмұны",
+    "lessons_count": "сабақ",
+    "more_details": "Толығырақ",
+    "continue_watching": "Қарауды жалғастыру",
+    "not_watched": "Қаралмаған"
   },
   "lesson": {
     "materials": "Материалдар",

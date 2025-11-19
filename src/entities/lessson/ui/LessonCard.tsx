@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CourseLessons } from "../../course/model/types/course";
 import { Image, Text, TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type LessonCardProps = {
     lesson: CourseLessons;
@@ -13,7 +14,19 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export const LessonCard: React.FC<LessonCardProps> = ({ lesson, courseId }) => {
   const router = useRouter();
-    const thumbnail = `https://img.youtube.com/vi/${lesson.video}/maxresdefault.jpg`;
+  const { i18n, t } = useTranslation();
+
+  // Apply translations based on current locale
+  const localizedLesson = useMemo(() => {
+    const translation = lesson.translations?.find(t => t.locale === i18n.language);
+    return {
+      title: translation?.title || lesson.title,
+      description: translation?.description || lesson.description,
+      video: translation?.video || lesson.video,
+    };
+  }, [lesson, i18n.language]);
+
+    const thumbnail = `https://img.youtube.com/vi/${localizedLesson.video}/maxresdefault.jpg`;
 
     const handlePress = () => {
         if (courseId) {
@@ -28,11 +41,11 @@ export const LessonCard: React.FC<LessonCardProps> = ({ lesson, courseId }) => {
             <Image source={{ uri: thumbnail }} style={styles.thumbnail} />
             <View style={styles.content}>
                 <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
-                    {lesson.title}
+                    {localizedLesson.title}
                 </Text>
                 <View style={styles.statusRow}>
                     <Feather name="circle" size={20} color="#015FF9" />
-                    <Text style={styles.statusText}>Не просмотрено</Text>
+                    <Text style={styles.statusText}>{t('courses.not_watched')}</Text>
                 </View>
             </View>
         </TouchableOpacity>
