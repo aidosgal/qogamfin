@@ -167,12 +167,18 @@ export default function LessonScreen() {
                     <Feather name="chevron-left" color="white" size={30} />
                 </TouchableOpacity>
                 
-                <YoutubePlayer
-                    height={250}
-                    play={playing}
-                    videoId={lesson.video}
-                    onChangeState={onStateChange}
-                />
+                {lesson.video && lesson.video.trim() !== '' ? (
+                    <YoutubePlayer
+                        height={250}
+                        play={playing}
+                        videoId={lesson.video}
+                        onChangeState={onStateChange}
+                    />
+                ) : (
+                    <View style={styles.center}>
+                        <Text style={styles.errorText}>{t('lesson.no_video')}</Text>
+                    </View>
+                )}
             </View>
 
             <ScrollView 
@@ -253,6 +259,9 @@ export default function LessonScreen() {
                             javaScriptEnabled={true}
                             domStorageEnabled={true}
                             scalesPageToFit={true}
+                            allowsInlineMediaPlayback={true}
+                            mediaPlaybackRequiresUserAction={false}
+                            mixedContentMode="always"
                             renderLoading={() => (
                                 <View style={styles.loadingContainer}>
                                     <ActivityIndicator size="large" color="#015FF9" />
@@ -262,6 +271,11 @@ export default function LessonScreen() {
                             onError={(syntheticEvent) => {
                                 const { nativeEvent } = syntheticEvent;
                                 console.error('WebView error:', nativeEvent);
+                                Alert.alert('Ошибка', 'Не удалось загрузить документ');
+                            }}
+                            onHttpError={(syntheticEvent) => {
+                                const { nativeEvent } = syntheticEvent;
+                                console.error('WebView HTTP error:', nativeEvent.statusCode);
                             }}
                         />
                     )}

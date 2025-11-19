@@ -82,21 +82,11 @@
     "not_found": "Урок не найден",
     "error_load": "Не удалось загрузить урок",
     "error_open_file": "Не удалось открыть файл",
+    "no_video": "Видео недоступно",
     "unavailable_title": "Урок недоступен",
     "unavailable_message": "Этот урок пока недоступен. Пожалуйста, завершите предыдущие уроки.",
     "ok": "OK"
   },
-  "certificates": {
-    "my_certificates": "Мои сертификаты",
-    "certificates_count": "сертификатов",
-    "no_certificates": "Нет сертификатов",
-    "no_certificates_description": "Завершите курсы, чтобы получить сертификаты об окончании",
-    "download_title": "Скачать сертификат",
-    "download_message": "Хотите скачать этот сертификат?",
-    "download": "Скачать",
-    "retry": "Попробовать снова"
-  }
-},
   "certificates": {
     "my_certificates": "Мои сертификаты",
     "certificates_count": "сертификатов",
